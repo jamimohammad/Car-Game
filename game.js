@@ -6,6 +6,7 @@ const speedText = document.getElementById("speed");
 const gameOverText = document.getElementById("game-over");
 const startBtn = document.getElementById("start-btn");
 const fast = document.getElementById('fast')
+const highScoreText = document.getElementById("high-score");
 
 const line = [295, 372, 445, 518, 590];
 
@@ -22,6 +23,8 @@ const roadBottom = 520;
 const roadLeft = 285;
 const roadRight = 590;
 const moveSpeed = 12;
+let highScore = Number(localStorage.getItem("highScore")) || 0;
+highScoreText.innerHTML = "High Score : " + highScore;
 
 document.addEventListener("keydown", function (event) {
 
@@ -47,12 +50,11 @@ document.addEventListener("keydown", function (event) {
         playerCar.style.left = playerPosition + "px";
     }
 
-    
-    if(event.key === "ArrowUp"){
+    if (event.key === "ArrowUp") {
 
         playerTop -= moveSpeed;
 
-        if(playerTop < roadTop){
+        if (playerTop < roadTop) {
             playerTop = roadTop;
         }
 
@@ -60,11 +62,11 @@ document.addEventListener("keydown", function (event) {
     }
 
 
-    if(event.key === "ArrowDown"){
+    if (event.key === "ArrowDown") {
 
         playerTop += moveSpeed;
 
-        if(playerTop > roadBottom){
+        if (playerTop > roadBottom) {
             playerTop = roadBottom;
         }
 
@@ -103,7 +105,7 @@ function moveEnemies() {
     if (!gameRunning) return;
     for (let i = 0; i < enemyCars.length; i++) {
 
-        let currentSpeed = speed;                
+        let currentSpeed = speed;
 
         if (enemyCars[i].querySelector("#fast")) {
 
@@ -161,6 +163,13 @@ function checkCollision() {
         ) {
 
             gameRunning = false;
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem("highScore", highScore);
+                highScoreText.innerHTML = "High Score : " + highScore;
+            }
+
             gameOverText.style.display = "block";
             startBtn.style.display = "block";
 
@@ -168,6 +177,5 @@ function checkCollision() {
         }
     }
 }
-
 startBtn.addEventListener("click", startGame);
 
